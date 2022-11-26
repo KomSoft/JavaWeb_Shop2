@@ -1,0 +1,9 @@
+# Default ignored files
+
+### IntelliJ IDEA ###
+.idea
+target
+*.iws
+*.iml
+*.ipr
+

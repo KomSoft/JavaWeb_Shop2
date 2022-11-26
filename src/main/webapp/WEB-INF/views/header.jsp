@@ -84,32 +84,23 @@ Licence URI: http://www.os-templates.com/template-terms
       <div class="holder">
           <c:choose>
               <c:when test="${sessionScope.authenticatedUser != null}">
-                  <h2 align='center'>Welcome back, ${sessionScope.authenticatedUser}!</h2>
-                  <center><a href='${pageContext.request.contextPath}/login?logoutKey'>Logout</a></center>
-                  <p align='center'>Your <a href="#">
-                      <img src='${pageContext.request.contextPath}/static/layout/cart20x20.png' alt='Кошик' /></a> has (*) item(s)</p>
+                  <h2 align="center">Welcome back, ${sessionScope.authenticatedUser}!</h2>
+                  <center><a href="${pageContext.request.contextPath}/login?logoutKey">Logout</a></center>
+                  <p align="center">Your <a href="#">
+                      <img src="${pageContext.request.contextPath}/static/layout/cart20x20.png" alt="Кошик" /></a> has (*) item(s)</p>
               </c:when>
               <c:otherwise>
-                  <h2 align='center'>Welcome, Guest!</h2>
-                  <p align='center'>To put items into Cart please login</p>
+                  <h2 align="center">Welcome, Guest!</h2>
+                  <p align="center">To put items into Cart please login</p>
               </c:otherwise>
           </c:choose>
          <ul>
-         <li><a href='${pageContext.request.contextPath}/home'>Home</a></li>
+         <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
 <!-- for test because after login categories is empty !!! I can't fix it. CategoriesController gets ArrayList always -->
-             <c:choose>
-                 <c:when test='${categories == null || categories == ""}'>
-                     <jsp:include page="/category" />
-                 </c:when>
-                 <c:otherwise>
-                     <li>categories=${categories}</li>
-                 </c:otherwise>
-             </c:choose>
-<!--
-         <c:if test='${categories == null}'>
+         <c:if test="${categories == null}">
             <jsp:include page="/category" />
          </c:if>
--->
+
          <c:forEach items="${categories}" var="cat">
             <li><a href="${pageContext.request.contextPath}/products?category=${cat.id}">${cat.name}</a></li>
          </c:forEach>
