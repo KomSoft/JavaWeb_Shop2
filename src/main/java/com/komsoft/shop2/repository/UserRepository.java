@@ -81,12 +81,12 @@ public class UserRepository {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
 //                String login = resultSet.getString("login");
-                String savedPassword = resultSet.getString("password");
                 String fullName = resultSet.getString("full_name");
                 String region = resultSet.getString("region");
                 String gender = resultSet.getString("gender");
                 String comment = resultSet.getString("comment");
                 user = new UserRegisteringData(login, fullName, region, gender, comment);
+                String savedPassword = resultSet.getString("password");
                 user.setSavedPassword(savedPassword);
             }
             resultSet.close();

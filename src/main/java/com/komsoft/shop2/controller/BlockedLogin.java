@@ -4,6 +4,8 @@ import com.komsoft.shop2.exception.DataBaseException;
 import com.komsoft.shop2.form.Header;
 import com.komsoft.shop2.model.UserRegisteringData;
 import com.komsoft.shop2.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -26,6 +29,7 @@ public class BlockedLogin extends HttpServlet {
     private LocalDateTime endTime = null;
     private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.UK);
     RequestDispatcher dispatcher = null;
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,12 +48,17 @@ public class BlockedLogin extends HttpServlet {
         if (count < MAX_TRY) {
             String login = request.getParameter("login");
             String password = request.getParameter("password");
+            String fullName;
             if (login != null && login.trim().length() != 0) {      // isBlank() is not supported
                 try {
                     UserRepository userRepository = new UserRepository();
-                    String fullName = userRepository.getFullNameByLoginAndPassword(login, UserRegisteringData.encryptPassword(password));
+//                  without using BCrypt can use this way
+//                    fullName = userRepository.getFullNameByLoginAndPassword(login, UserRegisteringData.encryptPassword(password));
+//                    if (fullName != null) {
+                    UserRegisteringData user = userRepository.getUserByLogin(login);
                     userRepository.closeConnection();
-                    if (fullName != null) {
+                    if (user != null && user.isPasswordCorrect(password)) {
+                        fullName = user.getFullName();
                         request.setAttribute(Header.MESSAGE, String.format(bundle.getString("accessGranted"), fullName));
                         request.getSession().setAttribute(Header.AUTHENTICATED_USER_KEY, fullName);
 //  TODO I don't know why in this way categories don't show. Therefore set Header.CATEGORIES to null
