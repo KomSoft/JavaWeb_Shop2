@@ -27,10 +27,11 @@ public class CategoryController extends HttpServlet {
             logger.log(Level.INFO, String.format("[CategoryController] %s", e.getMessage()));
         } finally {
             if (categories.size() == 0) {
-                categories.add(new Category().setId(0L).setName("error"));
+                categories.add(new Category().setId(0L).setName("Sorry, no Items"));
             }
         }
-        request.setAttribute(Header.CATEGORIES, categories);
+        request.getSession().setAttribute(Header.CATEGORIES, categories);
+
     }
 
     @Override

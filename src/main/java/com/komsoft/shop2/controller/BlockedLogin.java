@@ -61,9 +61,6 @@ public class BlockedLogin extends HttpServlet {
                         fullName = user.getFullName();
                         request.setAttribute(Header.MESSAGE, String.format(bundle.getString("accessGranted"), fullName));
                         request.getSession().setAttribute(Header.AUTHENTICATED_USER_KEY, fullName);
-//  TODO I don't know why in this way categories don't show. Therefore set Header.CATEGORIES to null
-//      next line doesn't work too... May be it send request to another page -> LOGIN_SUCCESS_PAGE
-                        request.setAttribute(Header.CATEGORIES, null);
                         url = Header.PAGE_ROOT + Header.LOGIN_SUCCESS_PAGE;
                     } else {
                         count++;

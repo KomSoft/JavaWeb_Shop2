@@ -45,7 +45,7 @@ Licence URI: http://www.os-templates.com/template-terms
     <ul>
       <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
       <li><a href="${pageContext.request.contextPath}/products">Products</a></li>
-      <li><a href="${pageContext.request.contextPath}/cart">Cart<span class="count">0</span></a></li>
+      <li><a href="${pageContext.request.contextPath}/cart">Cart<span class="count">${sessionScope.userCart.size()}</span></a></li>
       <li><a href="${pageContext.request.contextPath}/registration">Registration</a></li>
       <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
       <c:if test="${sessionScope.authenticatedUser != null}" >
@@ -86,9 +86,18 @@ Licence URI: http://www.os-templates.com/template-terms
               <c:when test="${sessionScope.authenticatedUser != null}">
                   <h2 align="center">Welcome back, ${sessionScope.authenticatedUser}!</h2>
                   <center><a href="${pageContext.request.contextPath}/login?logoutKey">Logout</a></center>
-                  <p align="center">Your <a href="#">
-                      <img src="${pageContext.request.contextPath}/static/layout/cart20x20.png" alt="Кошик" /></a> has (*) item(s)</p>
-              </c:when>
+                  <p align="center">Your <a href="${pageContext.request.contextPath}/cart">
+                      <img src="${pageContext.request.contextPath}/static/layout/cart20x20.png" alt="Кошик" /></a>
+                      <c:choose>
+                          <c:when test="${sessionScope.userCart == null}">
+                             is empty
+                          </c:when>
+                          <c:otherwise>
+                              has (${sessionScope.userCart.size()}) item(s)
+                          </c:otherwise>
+                      </c:choose>
+                  </p>
+               </c:when>
               <c:otherwise>
                   <h2 align="center">Welcome, Guest!</h2>
                   <p align="center">To put items into Cart please login</p>
@@ -96,12 +105,11 @@ Licence URI: http://www.os-templates.com/template-terms
           </c:choose>
          <ul>
          <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
-<!-- for test because after login categories is empty !!! I can't fix it. CategoriesController gets ArrayList always -->
-         <c:if test="${categories == null}">
+         <c:if test="${sessionScope.categories == null}">
             <jsp:include page="/category" />
          </c:if>
 
-         <c:forEach items="${categories}" var="cat">
+         <c:forEach items="${sessionScope.categories}" var="cat">
             <li><a href="${pageContext.request.contextPath}/products?category=${cat.id}">${cat.name}</a></li>
          </c:forEach>
          <li><a href="${pageContext.request.contextPath}/login">Login</a></li>

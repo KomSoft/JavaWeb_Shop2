@@ -27,6 +27,10 @@
         <servlet-name>CategoryController</servlet-name>
         <servlet-class>com.komsoft.shop2.controller.CategoryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CartController</servlet-name>
+        <servlet-class>com.komsoft.shop2.controller.CartController</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>BlockedLogin</servlet-name>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CartController</servlet-name>
+        <url-pattern>/cart</url-pattern>
     </servlet-mapping>
 
     <filter>

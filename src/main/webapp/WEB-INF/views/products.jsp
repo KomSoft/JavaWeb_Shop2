@@ -14,7 +14,13 @@
       </tr>
       <tr>
         <td>Price: ${product.price} UAH</td>
-        <td><input type='button' value='Buy' /></td>
+        <td>
+            <form action="${pageContext.request.contextPath}/cart" method="post" >
+                <input type="hidden" name="id" value="${product.id}" />
+                <input type="text" name="count" value="1" />
+                <input type="submit" value='Buy' />
+            </form>
+        </td>
       </tr>
       </table><br/><br/>
     </c:forEach>

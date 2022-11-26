@@ -76,4 +76,30 @@ public class ProductDto {
         return imageName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProductDto)) return false;
+        ProductDto that = (ProductDto) o;
+//        return getId() == that.getId() && Double.compare(that.getPrice(), getPrice()) == 0 && getName().equals(that.getName()) && getDescription().equals(that.getDescription()) && getCategory().equals(that.getCategory()) && getImageName().equals(that.getImageName());
+        return getId() == that.getId();
+    }
+
+    @Override
+    public int hashCode() {
+//        return Objects.hash(getId(), getName(), getDescription(), getPrice(), getCategory(), getImageName());
+        return Integer.valueOf((int) getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", imageName='" + imageName + '\'' +
+                '}';
+    }
 }
