@@ -100,6 +100,7 @@ public class UserRepository {
     }
 
     public UserRegisteringData saveUser(UserRegisteringData user) throws DataBaseException, ValidationException {
+        UserRegisteringData savedUser = null;
         if (AuthorizedUser.isUserRegisteringDataCorrect(user)) {
 //        check userRegisteringData
             try {
@@ -115,10 +116,10 @@ public class UserRepository {
                 statement.setString(4, user.getRegion());
                 statement.setString(5, user.getGender());
                 statement.setString(6, user.getComment());
-                int id = statement.executeUpdate();
+                int rowCount = statement.executeUpdate();
                 statement.close();
-                if (id == 1) {
-                    return user;    // TODO we should return new user from DataBase
+                if (rowCount == 1) {
+                    savedUser = user;    // TODO we should return new user from DataBase
                 } else {
                     throw new DataBaseException("[UserRepository] Unknown reason. User not saved");
                 }
@@ -128,7 +129,7 @@ public class UserRepository {
                 closeConnection();
             }
         }
-        return null;
+        return savedUser;
     }
 
 }

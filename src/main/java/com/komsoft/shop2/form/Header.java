@@ -13,6 +13,8 @@ public class Header {
     public static final String LOGIN_PAGE = "loginform.jsp";
     public static final String REGISTRATION_PAGE = "registration.jsp";
     public static final String LOGIN_SUCCESS_PAGE = "loginsuccess.jsp";
+    public static final String CART_PAGE = "cart.jsp";
+    public static final String PAY_PAGE = "pay.jsp";
     public static final String LOGIN_WELCOME_PAGE = "welcomeback.jsp";
     public static final String ERROR_PAGE = "errorpage.jsp";
     public static final String INFO_PAGE = "infopage.jsp";

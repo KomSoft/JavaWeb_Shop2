@@ -47,7 +47,7 @@ public class ProductRepository {
 
     public List<ProductDto> getAllProduct(String category) throws DataBaseException, ValidationException {
 //    public List<Product> getAllProduct(String category) throws DataBaseException, ValidationException {
-        List<ProductDto> result = new ArrayList<>();
+        List<ProductDto> result;
         String request;
         try {
             request = category == null || category.isEmpty() ? GET_ALL_PRODUCT : GET_ALL_PRODUCT_BY_CATEGORY;
@@ -58,16 +58,18 @@ public class ProductRepository {
                 statement.setInt(1, categoryIndex);
             }
             ResultSet products = statement.executeQuery();
+            result = new ArrayList<>();
             while (products.next()) {
                 result.add(new ProductConverter().convertProductToDto(new Product()
                         .setId(products.getLong("p_id"))
-//                result.add(new Product().setId(products.getLong("p_id"))
                         .setName(products.getString("p_name"))
                         .setDescription(products.getString("description"))
                         .setPrice(products.getDouble("price"))
                         .setCategory(new Category().setId(products.getLong("c_id"))
                                                 .setName(products.getString("c_name")))));
             }
+            products.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage());
         } catch (NumberFormatException e) {
@@ -79,7 +81,7 @@ public class ProductRepository {
     }
 
     public ProductDto getProductById(String id) throws DataBaseException, ValidationException {
-        ProductDto productDto = new ProductDto();
+        ProductDto productDto = null;
         String request;
         if (id == null) {
             throw new ValidationException("Oooops! <br>Product id no present");
@@ -99,7 +101,8 @@ public class ProductRepository {
                         .setCategory(new Category().setId(products.getLong("c_id"))
                                                 .setName(products.getString("c_name"))));
             }
-
+            products.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage());
         } catch (NumberFormatException e) {

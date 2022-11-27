@@ -1,0 +1,18 @@
+<form action="${pageContext.request.contextPath}/cart" method="post" >
+    <input type="hidden" name="id" value="${product.id}" />
+    <input type="button" value='-' onClick="changeCount(${product.id}, -1)"/>
+    <input type="number" name="count" id="items_count${product.id}" value="1" min="1" style="width: 4em"/>
+    <input type="button" value='+' onClick="changeCount(${product.id}, +1)"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value='Buy' />
+</form>
+
+<script>
+function changeCount(id, i) {
+   let p_id = "items_count" + id;
+   let count = parseInt(document.getElementById(p_id).value) || 0;
+   count += i;
+   count = (count < 1) ? 1 : count;
+   document.getElementById(p_id).value = count;
+//    How to change value in Map ???
+}
+</script>

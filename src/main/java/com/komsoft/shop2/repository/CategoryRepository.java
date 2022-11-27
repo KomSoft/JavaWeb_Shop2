@@ -41,16 +41,19 @@ public class CategoryRepository {
     }
 
     public List<Category> getAllCategory() throws DataBaseException {
-        List<Category> result = new ArrayList<>();
+        List<Category> result = null;
         try {
             getConnection();
             PreparedStatement statement = connection.prepareStatement(GET_ALL_CATEGORY);
             ResultSet categories = statement.executeQuery();
+            result = new ArrayList<>();
             while (categories.next()) {
                 result.add(new Category()
                         .setId(categories.getLong("id"))
                         .setName(categories.getString("name")));
             }
+            categories.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage());
         } finally {
@@ -70,6 +73,7 @@ public class CategoryRepository {
             long categoryIndex = Long.parseLong(category);
             statement.setLong(1, categoryIndex);
             ResultSet categories = statement.executeQuery();
+            result = new Category();
             if (categories.next()) {
                 result = new Category()
                         .setId(categories.getLong("id"))
@@ -77,6 +81,8 @@ public class CategoryRepository {
             } else {
                 throw new DataBaseException(String.format("Oooops! <br>Category: %s not exists", category));
             }
+            categories.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage());
         } catch (NumberFormatException e) {

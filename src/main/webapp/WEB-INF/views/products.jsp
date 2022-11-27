@@ -7,7 +7,8 @@
       <tr>
         <td width='150'>${product.name}</td>
         <td width='250' rowspan="2">
-            <img src="${pageContext.request.contextPath}/static/images/products/${product.imageName}" width="auto" height="100px"/> </td>
+            <img src="${pageContext.request.contextPath}/static/images/products/${product.imageName}" width="auto" height="100px"/>
+        </td>
       </tr>
        <tr>
         <td>${product.description}</td>
@@ -15,11 +16,7 @@
       <tr>
         <td>Price: ${product.price} UAH</td>
         <td>
-            <form action="${pageContext.request.contextPath}/cart" method="post" >
-                <input type="hidden" name="id" value="${product.id}" />
-                <input type="text" name="count" value="1" />
-                <input type="submit" value='Buy' />
-            </form>
+            <%@ include file="buy_form.html" %>
         </td>
       </tr>
       </table><br/><br/>

@@ -25,38 +25,63 @@ public class CartController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println("[CartController] doGet");
+        RequestDispatcher dispatcher;
+        String url;
+        Map<ProductDto, Integer> cart = (Map<ProductDto, Integer>) request.getSession().getAttribute(Header.USER_CART);
+        if (cart == null || cart.size() == 0) {
+            url = Header.PAGE_ROOT + Header.INFO_PAGE;
+            request.getSession().setAttribute(Header.MESSAGE, "Your Cart is empty. First put items in.");
+        } else {
+            url = Header.PAGE_ROOT + Header.CART_PAGE;
+        }
+        dispatcher = request.getRequestDispatcher(url);
+        dispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher;
+        String url;
+  System.out.println("[doPost] AUTHENTICATED_USER_KEY=" + request.getSession().getAttribute(Header.AUTHENTICATED_USER_KEY));
+        if (request.getSession().getAttribute(Header.AUTHENTICATED_USER_KEY) == null) {
+//           user mot logged in - redirect to login page
+            url = Header.PAGE_ROOT + Header.LOGIN_PAGE;
+            dispatcher = request.getRequestDispatcher(url);
+            request.setAttribute(Header.LOGIN_MESSAGE, String.format("To put items into Cart please login first"));
+            dispatcher.forward(request, response);
+            return;
+        }
         String idString = request.getParameter("id");
         String countString = request.getParameter("count");
-//        int count = 0;
-        try {
 /*
-            if (countString != null) {
-                count = Integer.parseInt(countString);
-            }
+        if (idString == null || countString == null) {
+
+        }
 */
+        try {
             int count = countString == null ? 0 : Integer.parseInt(countString);
             HttpSession session = request.getSession();
             if (session.getAttribute(Header.USER_CART) == null) {
                 session.setAttribute(Header.USER_CART, new HashMap<Product, Integer>());
             }
             Map<ProductDto, Integer> cart = (Map<ProductDto, Integer>) session.getAttribute(Header.USER_CART);
+  System.out.println("[doPost] cart.size()=" + cart.size());
             ProductDto product = productRepository.getProductById(idString);
             int quantity = cart.get(product) == null ? 0 : cart.get(product);
             quantity += count;
             cart.put(product, quantity);
+System.out.println("[doPost] productId=" + idString + ",   quantity=" + quantity + ",   count=" + count);
             session.setAttribute(Header.USER_CART, cart);
-    System.out.println("Cart has: " + cart);
             response.sendRedirect(request.getHeader("Referer"));
 
         } catch (NumberFormatException ignored) {
-
+//            because  <input type="number"
         } catch (ValidationException | DataBaseException e) {
-            throw new RuntimeException(e);
+            url = Header.PAGE_ROOT + Header.ERROR_PAGE;
+            request.getSession().setAttribute(Header.MESSAGE, e.getMessage());
+            dispatcher = request.getRequestDispatcher(url);
+            dispatcher.forward(request, response);
         }
     }
 
