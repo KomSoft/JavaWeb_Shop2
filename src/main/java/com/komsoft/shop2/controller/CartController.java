@@ -48,17 +48,14 @@ public class CartController extends HttpServlet {
 //           user mot logged in - redirect to login page
             url = Header.PAGE_ROOT + Header.LOGIN_PAGE;
             dispatcher = request.getRequestDispatcher(url);
-            request.setAttribute(Header.LOGIN_MESSAGE, String.format("To put items into Cart please login first"));
+            request.setAttribute(Header.LOGIN_MESSAGE, "To put items into Cart please login first");
             dispatcher.forward(request, response);
             return;
         }
         String idString = request.getParameter("id");
         String countString = request.getParameter("count");
-/*
-        if (idString == null || countString == null) {
-
-        }
-*/
+        boolean isDelete = request.getParameter("delete") != null;
+ System.out.println("delete=" + isDelete);
         try {
             int count = countString == null ? 0 : Integer.parseInt(countString);
             HttpSession session = request.getSession();
@@ -68,13 +65,19 @@ public class CartController extends HttpServlet {
             Map<ProductDto, Integer> cart = (Map<ProductDto, Integer>) session.getAttribute(Header.USER_CART);
   System.out.println("[doPost] cart.size()=" + cart.size());
             ProductDto product = productRepository.getProductById(idString);
-            int quantity = cart.get(product) == null ? 0 : cart.get(product);
-            quantity += count;
-            cart.put(product, quantity);
-System.out.println("[doPost] productId=" + idString + ",   quantity=" + quantity + ",   count=" + count);
+            if (product != null) {
+                if (isDelete) {
+                    cart.remove(product);
+                } else {
+                    int quantity = cart.get(product) == null ? 0 : cart.get(product);
+                    quantity += count;
+                    cart.put(product, quantity);
+                }
+            }
+  System.out.println("[doPost] cart.size()=" + cart.size());
+//System.out.println("[doPost] productId=" + idString + ",   quantity=" + quantity + ",   count=" + count);
             session.setAttribute(Header.USER_CART, cart);
             response.sendRedirect(request.getHeader("Referer"));
-
         } catch (NumberFormatException ignored) {
 //            because  <input type="number"
         } catch (ValidationException | DataBaseException e) {

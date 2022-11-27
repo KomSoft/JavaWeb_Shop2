@@ -4,8 +4,6 @@ import com.komsoft.shop2.dto.ProductDto;
 import com.komsoft.shop2.exception.DataBaseException;
 import com.komsoft.shop2.exception.ValidationException;
 import com.komsoft.shop2.form.Header;
-import com.komsoft.shop2.model.Product;
-import com.komsoft.shop2.repository.PostgreSQLJDBC;
 import com.komsoft.shop2.repository.ProductRepository;
 
 import javax.servlet.*;
@@ -13,7 +11,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 public class ProductController extends HttpServlet {
     ProductRepository productRepository;

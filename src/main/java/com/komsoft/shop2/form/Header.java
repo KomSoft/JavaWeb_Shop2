@@ -9,6 +9,7 @@ public class Header {
     public static final String MESSAGE = "message";
     public static final String CATEGORIES = "categories";
     public static final String LOGIN_MESSAGE = "loginMessage";
+    public static final String PAY_MESSAGE = "payMessage";
     public static final String USER_CART = "userCart";
     public static final String LOGIN_PAGE = "loginform.jsp";
     public static final String REGISTRATION_PAGE = "registration.jsp";
