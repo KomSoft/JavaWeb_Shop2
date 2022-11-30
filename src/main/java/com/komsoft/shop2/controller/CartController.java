@@ -3,9 +3,10 @@ package com.komsoft.shop2.controller;
 import com.komsoft.shop2.dto.ProductDto;
 import com.komsoft.shop2.exception.DataBaseException;
 import com.komsoft.shop2.exception.ValidationException;
-import com.komsoft.shop2.form.Header;
+import com.komsoft.shop2.factory.DAOFactory;
+import com.komsoft.shop2.util.Header;
 import com.komsoft.shop2.model.Product;
-import com.komsoft.shop2.repository.ProductRepository;
+import com.komsoft.shop2.repository.ProductDAO;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -15,17 +16,16 @@ import java.util.Map;
 
 public class CartController extends HttpServlet {
 
-    ProductRepository productRepository;
+    DAOFactory daoFactory;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        productRepository = new ProductRepository();
+        daoFactory = DAOFactory.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("[CartController] doGet");
         RequestDispatcher dispatcher;
         String url;
         Map<ProductDto, Integer> cart = (Map<ProductDto, Integer>) request.getSession().getAttribute(Header.USER_CART);
@@ -43,9 +43,8 @@ public class CartController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher;
         String url;
-  System.out.println("[doPost] AUTHENTICATED_USER_KEY=" + request.getSession().getAttribute(Header.AUTHENTICATED_USER_KEY));
         if (request.getSession().getAttribute(Header.AUTHENTICATED_USER_KEY) == null) {
-//           user mot logged in - redirect to login page
+//           user not logged in - redirect to login page
             url = Header.PAGE_ROOT + Header.LOGIN_PAGE;
             dispatcher = request.getRequestDispatcher(url);
             request.setAttribute(Header.LOGIN_MESSAGE, "To put items into Cart please login first");
@@ -55,7 +54,6 @@ public class CartController extends HttpServlet {
         String idString = request.getParameter("id");
         String countString = request.getParameter("count");
         boolean isDelete = request.getParameter("delete") != null;
- System.out.println("delete=" + isDelete);
         try {
             int count = countString == null ? 0 : Integer.parseInt(countString);
             HttpSession session = request.getSession();
@@ -63,8 +61,8 @@ public class CartController extends HttpServlet {
                 session.setAttribute(Header.USER_CART, new HashMap<Product, Integer>());
             }
             Map<ProductDto, Integer> cart = (Map<ProductDto, Integer>) session.getAttribute(Header.USER_CART);
-  System.out.println("[doPost] cart.size()=" + cart.size());
-            ProductDto product = productRepository.getProductById(idString);
+            ProductDAO productDAO = daoFactory.getProductDAO();
+            ProductDto product = productDAO.getProductById(idString);
             if (product != null) {
                 if (isDelete) {
                     cart.remove(product);
@@ -74,8 +72,6 @@ public class CartController extends HttpServlet {
                     cart.put(product, quantity);
                 }
             }
-  System.out.println("[doPost] cart.size()=" + cart.size());
-//System.out.println("[doPost] productId=" + idString + ",   quantity=" + quantity + ",   count=" + count);
             session.setAttribute(Header.USER_CART, cart);
             response.sendRedirect(request.getHeader("Referer"));
         } catch (NumberFormatException ignored) {

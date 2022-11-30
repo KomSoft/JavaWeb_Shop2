@@ -81,9 +81,14 @@ public class UserRegisteringData {
     public boolean isPasswordCorrect(String candidatePassword) {
         boolean isEquals;
 //      isEquals = encryptPassword(candidatePassword).equals(savedPassword);    //      for MD5 encryption
-        isEquals = BCrypt.checkpw(candidatePassword, this.savedPassword);       //      for BCrypt
-        if (isEquals) {
-            this.encryptedPassword = savedPassword;
+        try {
+            isEquals = BCrypt.checkpw(candidatePassword, this.savedPassword);       //      for BCrypt
+            if (isEquals) {
+                this.encryptedPassword = savedPassword;
+            }
+        } catch (IllegalArgumentException e) {
+            isEquals = false;
+            e.printStackTrace();
         }
         return isEquals;
     }

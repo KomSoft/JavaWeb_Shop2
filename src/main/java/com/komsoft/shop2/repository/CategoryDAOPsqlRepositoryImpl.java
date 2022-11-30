@@ -2,6 +2,7 @@ package com.komsoft.shop2.repository;
 
 import com.komsoft.shop2.exception.DataBaseException;
 import com.komsoft.shop2.exception.ValidationException;
+import com.komsoft.shop2.factory.DAOFactory;
 import com.komsoft.shop2.model.Category;
 
 import java.sql.Connection;
@@ -11,39 +12,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryRepository {
+public class CategoryDAOPsqlRepositoryImpl implements CategoryDAO {
     private static final String GET_ALL_CATEGORY = "SELECT * FROM category ORDER BY id ASC";
     private static final String GET_ALL_CATEGORY_BY_ID = "SELECT * FROM category WHERE id=?";
-    private Connection connection;
+    private DAOFactory daoFactory;
 
-    public CategoryRepository() {
-    }
-
-    public void getConnection() throws DataBaseException {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connection = HikariCPDataSource.getConnection();
-            }
-        } catch (SQLException e) {
-            throw new DataBaseException("[CategoryRepository] Error getting new connection. " + e.getMessage());
-        }
-    }
-
-    public void closeConnection() throws DataBaseException {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                connection = null;
-            }
-        } catch (SQLException e) {
-            throw new DataBaseException("[CategoryRepository] Error closing connection. " + e.getMessage());
-        }
+    public CategoryDAOPsqlRepositoryImpl(DAOFactory daoFactory) {
+        this.daoFactory = daoFactory;
     }
 
     public List<Category> getAllCategory() throws DataBaseException {
         List<Category> result = null;
         try {
-            getConnection();
+            Connection connection = daoFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(GET_ALL_CATEGORY);
             ResultSet categories = statement.executeQuery();
             result = new ArrayList<>();
@@ -57,7 +38,7 @@ public class CategoryRepository {
         } catch (SQLException e) {
             throw new DataBaseException(e.getMessage());
         } finally {
-            closeConnection();
+            daoFactory.closeConnection();
         }
         return result;
     }
@@ -68,7 +49,7 @@ public class CategoryRepository {
             if (category == null) {
                 throw new ValidationException("Oooops! <br>Category is not defined");
             }
-            getConnection();
+            Connection connection = daoFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(GET_ALL_CATEGORY_BY_ID);
             long categoryIndex = Long.parseLong(category);
             statement.setLong(1, categoryIndex);
@@ -88,7 +69,7 @@ public class CategoryRepository {
         } catch (NumberFormatException e) {
             throw new ValidationException(String.format("Oooops! <br>Invalid category: %s, try another", category));
         } finally {
-            closeConnection();
+            daoFactory.closeConnection();
         }
         return result;
     }

@@ -1,6 +1,6 @@
 package com.komsoft.shop2.controller;
 
-import com.komsoft.shop2.form.Header;
+import com.komsoft.shop2.util.Header;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

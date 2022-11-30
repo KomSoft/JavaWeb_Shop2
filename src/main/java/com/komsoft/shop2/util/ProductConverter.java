@@ -1,7 +1,6 @@
 package com.komsoft.shop2.util;
 
 import com.komsoft.shop2.dto.ProductDto;
-import com.komsoft.shop2.exception.ValidationException;
 import com.komsoft.shop2.model.Product;
 
 public class ProductConverter {

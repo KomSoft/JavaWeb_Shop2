@@ -1,9 +1,10 @@
 package com.komsoft.shop2.controller;
 
 import com.komsoft.shop2.exception.DataBaseException;
-import com.komsoft.shop2.form.Header;
+import com.komsoft.shop2.factory.DAOFactory;
+import com.komsoft.shop2.util.Header;
 import com.komsoft.shop2.model.UserRegisteringData;
-import com.komsoft.shop2.repository.UserRepository;
+import com.komsoft.shop2.repository.UserDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +30,18 @@ public class BlockedLogin extends HttpServlet {
     private LocalDateTime endTime = null;
     private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.UK);
     RequestDispatcher dispatcher = null;
+    DAOFactory daoFactory;
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void init() throws ServletException {
+        super.init();
+        daoFactory = DAOFactory.getInstance();
+//        daoFactory = DAOFactory.getInstance(DATA_SOURCE);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 //        response.setContentType("text/html");
         String url = "";
         if (endTime != null) {
@@ -51,12 +60,12 @@ public class BlockedLogin extends HttpServlet {
             String fullName;
             if (login != null && login.trim().length() != 0) {      // isBlank() is not supported
                 try {
-                    UserRepository userRepository = new UserRepository();
+                    UserDAO userDAO = daoFactory.getUserDAO();
 //                  without using BCrypt can use this way
 //                    fullName = userRepository.getFullNameByLoginAndPassword(login, UserRegisteringData.encryptPassword(password));
 //                    if (fullName != null) {
-                    UserRegisteringData user = userRepository.getUserByLogin(login);
-                    userRepository.closeConnection();
+                    UserRegisteringData user = userDAO.getUserByLogin(login);
+//                    userRepository.closeConnection();
                     if (user != null && user.isPasswordCorrect(password)) {
                         fullName = user.getFullName();
                         request.setAttribute(Header.MESSAGE, String.format(bundle.getString("accessGranted"), fullName));

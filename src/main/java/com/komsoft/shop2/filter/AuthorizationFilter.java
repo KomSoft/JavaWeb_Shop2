@@ -1,13 +1,11 @@
 package com.komsoft.shop2.filter;
 
-import com.komsoft.shop2.form.Header;
+import com.komsoft.shop2.util.Header;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +13,7 @@ public class AuthorizationFilter implements Filter {
     Logger logger = Logger.getLogger(AuthorizationFilter.class.getName());
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         logger.log(Level.INFO, "[>>AuthorizationFilter<<] Init Filter");
     }
 

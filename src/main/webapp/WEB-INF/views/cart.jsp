@@ -29,8 +29,8 @@
                     <input type="button" value="-" onClick="changeCount(${product.key.id}, -1)"/>
                     <input type="number" id="items_count${product.key.id}" value="${product.value}" min="1" style="width: 4em"/>
                     <input type="button" value="+" onClick="changeCount(${product.key.id}, +1)"/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Remove from Cart (not Implemented Yet)" />
-                    (Changed value not save yet)
+                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Remove from Cart" />
+                    <br/>(Changed value not save yet)
                 </form>
             </td>
         </tr>

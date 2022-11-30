@@ -2,10 +2,10 @@ package com.komsoft.shop2.controller;
 
 import com.komsoft.shop2.exception.DataBaseException;
 import com.komsoft.shop2.exception.ValidationException;
-import com.komsoft.shop2.form.Header;
+import com.komsoft.shop2.factory.DAOFactory;
+import com.komsoft.shop2.util.Header;
 import com.komsoft.shop2.model.AuthorizedUser;
-import com.komsoft.shop2.repository.PostgreSQLJDBC;
-import com.komsoft.shop2.repository.UserRepository;
+import com.komsoft.shop2.repository.UserDAO;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,18 +22,24 @@ public class Registration extends HttpServlet {
     private static final long serialVersionUID = -1210613704116541742L;
     private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.UK);
     RequestDispatcher dispatcher = null;
+    DAOFactory daoFactory;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/html");
+    public void init() throws ServletException {
+        super.init();
+        daoFactory = DAOFactory.getInstance();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         AuthorizedUser checkedUser = new AuthorizedUser(request);
         String url;
         if (checkedUser.isCorrect()) {
 //            write to DB, check errors and get result
             try {
-                UserRepository userRepository = new UserRepository();
-                userRepository.saveUser(checkedUser.getUserRegisteringData());
-                userRepository.closeConnection();
+                UserDAO userDAO = daoFactory.getUserDAO();
+                userDAO.saveUser(checkedUser.getUserRegisteringData());
+//                userRepository.closeConnection();
                 url = Header.PAGE_ROOT + Header.INFO_PAGE;
                 request.setAttribute(Header.MESSAGE, String.format(bundle.getString("registerCompleted"), checkedUser.getUserRegisteringData().getFullName()));
 //                can redirect to \login there but then we won't see a result
@@ -59,7 +65,6 @@ public class Registration extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        response.setContentType("text/html");
         HttpSession session = request.getSession();
         String url;
         if (session.getAttribute(Header.AUTHENTICATED_USER_KEY) != null) {

@@ -1,6 +1,6 @@
 package com.komsoft.shop2.controller;
 
-import com.komsoft.shop2.form.Header;
+import com.komsoft.shop2.util.Header;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +17,7 @@ public class PayController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response){
     }
 
     @Override
