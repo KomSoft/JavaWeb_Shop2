@@ -22,7 +22,7 @@ public abstract class DAOFactory {
         try {
             switch (whichFactory) {
                 case POSTGRESQL: return new PostgreSQLDAOFactory();
-                case HIKARI_POSTGRESQL: return HikariCPPostgreSQLDAOFactory.getInstance();
+//                case HIKARI_POSTGRESQL: return HikariCPPostgreSQLDAOFactory.getInstance();
             }
         } catch (DataBaseException e) {
             e.printStackTrace();

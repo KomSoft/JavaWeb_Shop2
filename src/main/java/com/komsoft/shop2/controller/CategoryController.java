@@ -8,7 +8,6 @@ import com.komsoft.shop2.repository.CategoryDAO;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
