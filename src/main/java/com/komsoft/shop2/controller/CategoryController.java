@@ -5,18 +5,18 @@ import com.komsoft.shop2.factory.DAOFactory;
 import com.komsoft.shop2.util.Header;
 import com.komsoft.shop2.model.Category;
 import com.komsoft.shop2.repository.CategoryDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
-import java.util.ArrayList;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CategoryController extends HttpServlet {
     DAOFactory daoFactory;
 
-    Logger logger = Logger.getLogger(CategoryController.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
     public void init() throws ServletException {
@@ -26,17 +26,13 @@ public class CategoryController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        List<Category> categories = new ArrayList<>();
+        List<Category> categories = null;
         try {
             CategoryDAO categoryDAO = daoFactory.getCategoryDAO();
             categories = categoryDAO.getAllCategory();
         } catch (DataBaseException e) {
 //      TODO - поки так
-            logger.log(Level.INFO, String.format("[CategoryController] %s", e.getMessage()));
-        } finally {
-            if (categories.size() == 0) {
-                categories.add(new Category().setId(0L).setName("DB Error"));
-            }
+            logger.error("[CategoryController] {}", e.getMessage());
         }
         request.getSession().setAttribute(Header.CATEGORIES, categories);
     }

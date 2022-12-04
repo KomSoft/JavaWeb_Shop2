@@ -39,7 +39,6 @@ public class Registration extends HttpServlet {
             try {
                 UserDAO userDAO = daoFactory.getUserDAO();
                 userDAO.saveUser(checkedUser.getUserRegisteringData());
-//                userRepository.closeConnection();
                 url = Header.PAGE_ROOT + Header.INFO_PAGE;
                 request.setAttribute(Header.MESSAGE, String.format(bundle.getString("registerCompleted"), checkedUser.getUserRegisteringData().getFullName()));
 //                can redirect to \login there but then we won't see a result

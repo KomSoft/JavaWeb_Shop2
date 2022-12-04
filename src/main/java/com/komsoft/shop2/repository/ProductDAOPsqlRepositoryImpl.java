@@ -26,7 +26,6 @@ public class ProductDAOPsqlRepositoryImpl implements ProductDAO {
     }
 
     public List<ProductDto> getAllProduct(String category) throws DataBaseException, ValidationException {
-//    public List<Product> getAllProduct(String category) throws DataBaseException, ValidationException {
         List<ProductDto> result;
         String request;
         try {

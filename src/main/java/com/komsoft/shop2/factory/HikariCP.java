@@ -14,6 +14,7 @@ public class HikariCP {
     private static HikariDataSource hikariDataSources;
 
     public static Connection getConnection() throws DataBaseException {
+System.out.println("HikariCP.getConnection() called");
         try {
             return hikariDataSources.getConnection();
         } catch (SQLException e) {
@@ -22,6 +23,7 @@ public class HikariCP {
     }
 
     private HikariCP() throws DataBaseException {
+System.out.println("Private Constructor HikariCP() called");
         DBProperties prop = new DBProperties("hikaripostgres");
         if (prop.isReady()) {
             config.setJdbcUrl(prop.getUrl());
@@ -38,12 +40,12 @@ public class HikariCP {
 
 /*
 //    or use
-    private static HikariConfig config = new HikariConfig("datasource.properties" );
+    private static HikariConfig config = new HikariConfig("datasourcepostgres.properties" );
 
-//    The properties file should look something like this:
+    The properties file should look something like this:
     dataSourceClassName= //TBD
     dataSource.user= //TBD
-//other properties name should start with dataSource as shown above
+    other properties name should start with dataSource as shown above
 */
 
 }

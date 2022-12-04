@@ -83,13 +83,10 @@ public class ProductDto {
         ProductDto that = (ProductDto) o;
         return getId() == that.getId() && getName().equals(that.getName())
                 && getDescription().equals(that.getDescription())
-                && Math.round((getPrice() - this.getPrice()) * 100) == 0
+                && Math.round((getPrice() - that.getPrice()) * 100) == 0
                 && getCategory().getId() == that.getCategory().getId()
                 && getCategory().getName().equals(that.getCategory().getName());
-//        return getId() == that.getId() && Math.round((getPrice() - this.getPrice()) * 100) == 0 && getName().equals(that.getName()) && getDescription().equals(that.getDescription()) && getCategory().equals(that.getCategory());
 //        return getId() == that.getId() && Double.compare(that.getPrice(), getPrice()) == 0 && getName().equals(that.getName()) && getDescription().equals(that.getDescription()) && getCategory().equals(that.getCategory()) && getImageName().equals(that.getImageName());
-//        return getId() == that.getId() && Double.compare(that.getPrice(), getPrice()) == 0 && getName().equals(that.getName()) && getDescription().equals(that.getDescription()) && getCategory().equals(that.getCategory()) && getImageName().equals(that.getImageName());
-//        return getId() == that.getId();
     }
 
     @Override

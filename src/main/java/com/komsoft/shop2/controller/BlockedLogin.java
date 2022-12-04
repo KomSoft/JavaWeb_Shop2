@@ -5,8 +5,6 @@ import com.komsoft.shop2.factory.DAOFactory;
 import com.komsoft.shop2.util.Header;
 import com.komsoft.shop2.model.UserRegisteringData;
 import com.komsoft.shop2.repository.UserDAO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -31,13 +28,11 @@ public class BlockedLogin extends HttpServlet {
     private final ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.UK);
     RequestDispatcher dispatcher = null;
     DAOFactory daoFactory;
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
     public void init() throws ServletException {
         super.init();
         daoFactory = DAOFactory.getInstance();
-//        daoFactory = DAOFactory.getInstance(DATA_SOURCE);
     }
 
     @Override

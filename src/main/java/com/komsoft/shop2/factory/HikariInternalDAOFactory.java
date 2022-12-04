@@ -9,29 +9,13 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class HikariCPPostgreSQLDAOFactory extends DAOFactory {
+public class HikariInternalDAOFactory extends DAOFactory {
 
     private static HikariConfig config = new HikariConfig();
     private static HikariDataSource hikariDataSources;
-    private static HikariCPPostgreSQLDAOFactory instance;
 
-    public Connection getConnection() throws DataBaseException {
-        return getConnect();
-    }
-
-    public static Connection getConnect() throws DataBaseException {
-        try {
-            return hikariDataSources.getConnection();
-        } catch (SQLException e) {
-            throw new DataBaseException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void closeConnection() {
-    }
-
-    private HikariCPPostgreSQLDAOFactory() throws DataBaseException {
+    public HikariInternalDAOFactory() throws DataBaseException {
+System.out.println("Constructor HikariInternalDAOFactory() called");
         DBProperties prop = new DBProperties("hikaripostgres");
         if (prop.isReady()) {
             config.setJdbcUrl(prop.getUrl());
@@ -44,17 +28,19 @@ public class HikariCPPostgreSQLDAOFactory extends DAOFactory {
         } else {
             throw new DataBaseException("Can't read DB properties. DB isn't connected");
         }
+        hikariDataSources = new HikariDataSource(config);
     }
 
-    public static HikariCPPostgreSQLDAOFactory getInstance() {
-        if (instance == null) {
-            try {
-                instance = new HikariCPPostgreSQLDAOFactory();
-            } catch (DataBaseException e) {
-                e.printStackTrace();
-            }
+    public Connection getConnection() throws DataBaseException {
+        try {
+            return hikariDataSources.getConnection();
+        } catch (SQLException e) {
+            throw new DataBaseException(e.getMessage());
         }
-        return instance;
+    }
+
+    @Override
+    public void closeConnection() {
     }
 
     @Override

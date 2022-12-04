@@ -61,7 +61,6 @@ public class UserDAOPsqlRepositoryImpl implements UserDAO {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-//                String login = resultSet.getString("login");
                 String fullName = resultSet.getString("full_name");
                 String region = resultSet.getString("region");
                 String gender = resultSet.getString("gender");
@@ -83,7 +82,6 @@ public class UserDAOPsqlRepositoryImpl implements UserDAO {
     public UserRegisteringData saveUser(UserRegisteringData user) throws DataBaseException, ValidationException {
         UserRegisteringData savedUser = null;
         if (AuthorizedUser.isUserRegisteringDataCorrect(user)) {
-//        check userRegisteringData
             try {
                 String fullName = this.getFullNameByLogin(user.getLogin());
                 if (fullName != null) {
@@ -105,7 +103,7 @@ public class UserDAOPsqlRepositoryImpl implements UserDAO {
                     throw new DataBaseException("[UserRepository] Unknown reason. User not saved");
                 }
             } catch (SQLException e) {
-                throw new DataBaseException("[UserRepository] Can't save user. SQLException " + e.getMessage());
+                throw new DataBaseException(String.format("[UserRepository] Can't save user. %s", e.getMessage()));
             } finally {
                 daoFactory.closeConnection();
             }

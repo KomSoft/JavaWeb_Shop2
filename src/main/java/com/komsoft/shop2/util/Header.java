@@ -2,7 +2,6 @@ package com.komsoft.shop2.util;
 
 public class Header {
 
-//    public static final int DATA_SOURCE = DAOFactory.POSTGRESQL;
     public static final String PAGE_ROOT = "WEB-INF/views/";
     public static final String AUTHORIZED_PAGE_ROOT = PAGE_ROOT + "authorized/";
     public static final String LOGOUT_KEY = "logoutKey";

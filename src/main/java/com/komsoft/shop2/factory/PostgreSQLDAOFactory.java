@@ -10,20 +10,10 @@ import java.sql.SQLException;
 
 public class PostgreSQLDAOFactory extends DAOFactory {
     private final String url;
-    final String user;
-    final String password;
-    final String driverName;
+    private final String user;
+    private final String password;
+    private final String driverName;
     private Connection connection = null;
-
-    @Override
-    public CategoryDAO getCategoryDAO() {
-        return new CategoryDAOPsqlRepositoryImpl(this);
-    }
-
-    @Override
-    public ProductDAO getProductDAO() {
-        return new ProductDAOPsqlRepositoryImpl(this);
-    }
 
     public PostgreSQLDAOFactory() throws DataBaseException {
         DBProperties prop = new DBProperties("postgresql");
@@ -33,10 +23,6 @@ public class PostgreSQLDAOFactory extends DAOFactory {
             user = prop.getUserName();
             password = prop.getPassword();
         } else {
-            url = null;
-            driverName = null;
-            user = null;
-            password = null;
             throw new DataBaseException("Can't read DB properties. DB isn't connected");
         }
     }
@@ -44,6 +30,16 @@ public class PostgreSQLDAOFactory extends DAOFactory {
     @Override
     public UserDAO getUserDAO() {
         return new UserDAOPsqlRepositoryImpl(this);
+    }
+
+    @Override
+    public CategoryDAO getCategoryDAO() {
+        return new CategoryDAOPsqlRepositoryImpl(this);
+    }
+
+    @Override
+    public ProductDAO getProductDAO() {
+        return new ProductDAOPsqlRepositoryImpl(this);
     }
 
     public Connection getConnection() throws DataBaseException {
